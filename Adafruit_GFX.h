@@ -13,10 +13,8 @@ class Adafruit_GFX : public Print
 {
 
 public:
-  // 绘制实心五角星
-  void fillPentagram(int16_t x, int16_t y, int16_t r, uint16_t color);
-  // 绘制实心椭圆
-  void fillEllipse(int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color);
+  // 绘制樱花形状
+  void drawSakura(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
 

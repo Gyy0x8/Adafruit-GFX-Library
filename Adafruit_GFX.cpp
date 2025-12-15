@@ -1389,50 +1389,39 @@ void GFXcanvas16::fillScreen(uint16_t color) {
     }
 }
 
-// ========== 五角星方法实现 ==========
-
-// 绘制实心五角星
-void Adafruit_GFX::fillPentagram(int16_t x, int16_t y, int16_t r, uint16_t color) {
-  // 从外向内绘制多层五角星
-  for (int i = r; i > 0; i -= 2) {
-    drawPentagram(x, y, i, color);
-  }
-}
-
-// ========== 椭圆方法实现 ==========
-
-// 绘制实心椭圆
-void Adafruit_GFX::fillEllipse(int16_t x0, int16_t y0, int16_t rx, int16_t ry, uint16_t color) {
-  if (rx < 0 || ry < 0) return;
-  
-  int32_t x, y;
-  int32_t rx2 = rx * rx;
-  int32_t ry2 = ry * ry;
-  int32_t fx2 = 4 * rx2;
-  int32_t fy2 = 4 * ry2;
-  int32_t s;
-  
-  // 第一部分
-  for (x = 0, y = ry, s = 2*ry2 + rx2*(1-2*ry); ry2*x <= rx2*y; x++) {
-    drawFastHLine(x0 - x, y0 + y, 2*x + 1, color);
-    drawFastHLine(x0 - x, y0 - y, 2*x + 1, color);
+// 绘制樱花形状
+void Adafruit_GFX::drawSakura(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
+    startWrite();
     
-    if (s >= 0) {
-      s += fx2 * (1 - y);
-      y--;
+    // 绘制5个花瓣（樱花典型的5瓣）
+    for (int i = 0; i < 5; i++) {
+        float angle = PI * 2 * i / 5 - PI / 2;
+        
+        // 花瓣顶点
+        int16_t x1 = x0 + r * cos(angle);
+        int16_t y1 = y0 + r * sin(angle);
+        
+        // 花瓣左侧点
+        float leftAngle = angle - PI / 8;
+        int16_t x2 = x0 + r * 0.4 * cos(leftAngle);
+        int16_t y2 = y0 + r * 0.4 * sin(leftAngle);
+        
+        // 花瓣右侧点
+        float rightAngle = angle + PI / 8;
+        int16_t x3 = x0 + r * 0.4 * cos(rightAngle);
+        int16_t y3 = y0 + r * 0.4 * sin(rightAngle);
+        
+        // 绘制花瓣三角形
+        fillTriangle(x1, y1, x2, y2, x3, y3, color);
+        
+        // 花瓣中心弧线（用小圆模拟）
+        int16_t arcX = x0 + r * 0.6 * cos(angle);
+        int16_t arcY = y0 + r * 0.6 * sin(angle);
+        fillCircle(arcX, arcY, r / 6, color);
     }
-    s += ry2 * ((4 * x) + 6);
-  }
-  
-  // 第二部分
-  for (x = rx, y = 0, s = 2*rx2 + ry2*(1-2*rx); rx2*y <= ry2*x; y++) {
-    drawFastHLine(x0 - x, y0 + y, 2*x + 1, color);
-    drawFastHLine(x0 - x, y0 - y, 2*x + 1, color);
     
-    if (s >= 0) {
-      s += fy2 * (1 - x);
-      x--;
-    }
-    s += rx2 * ((4 * y) + 6);
-  }
+    // 花心
+    fillCircle(x0, y0, r / 4, color);
+    
+    endWrite();
 }
