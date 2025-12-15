@@ -1425,3 +1425,30 @@ void Adafruit_GFX::drawSakura(int16_t x0, int16_t y0, int16_t r, uint16_t color)
     
     endWrite();
 }
+
+
+// 绘制简单的菊花
+void Adafruit_GFX::drawChrysanthemum(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
+    startWrite();
+    
+    // 绘制16个细长花瓣
+    int numPetals = 16;
+    for (int i = 0; i < numPetals; i++) {
+        float angle = PI * 2 * i / numPetals;
+        
+        int16_t x1 = x0 + r * 0.3 * cos(angle);
+        int16_t y1 = y0 + r * 0.3 * sin(angle);
+        int16_t x2 = x0 + r * cos(angle);
+        int16_t y2 = y0 + r * sin(angle);
+        
+        // 绘制花瓣线条（加粗）
+        drawLine(x1, y1, x2, y2, color);
+        drawLine(x1+1, y1, x2+1, y2, color);
+        drawLine(x1, y1+1, x2, y2+1, color);
+    }
+    
+    // 花心
+    fillCircle(x0, y0, r / 3, color);
+    
+    endWrite();
+}

@@ -15,6 +15,8 @@ class Adafruit_GFX : public Print
 public:
   // 绘制樱花形状
   void drawSakura(int16_t x0, int16_t y0, int16_t r, uint16_t color);
+  // 绘制简单的菊花
+  void drawChrysanthemum(int16_t x0, int16_t y0, int16_t r, uint16_t color);
 
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
 
